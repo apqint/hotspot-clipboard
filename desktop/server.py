@@ -1,5 +1,4 @@
 import re
-
 from flask import Flask, request
 from pyperclip import copy
 from sys import argv
@@ -23,16 +22,16 @@ if __name__ == "__main__":
     default_port = 1413
     default_host = "0.0.0.0"
     argv_string = ' '.join(argv).lower()
-    # Search for host and port provided by user, without validating eligibility
-    host_finder_regex = r"-host\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
-    port_finder_regex = r"-port\s*(\d{1,5})"
 
+    # Search for host and port provided by user, without validating eligibility
     if "-host" in argv_string:
+        host_finder_regex = r"-host\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
         matches = re.search(host_finder_regex, argv_string)
         if matches is not None:
             default_host = matches.groups()[0]
 
     if "-port" in argv_string:
+        port_finder_regex = r"-port\s*(\d{1,5})"
         matches = re.search(port_finder_regex, argv_string)
         if matches is not None:
             default_port = matches.groups()[0]
