@@ -36,7 +36,7 @@ def clipboard_changed() -> bool:
         return True
     return False
 
-def loop(iter_time: int = 2):
+def loop(iter_time: int = 2) -> None:
     while server_ok():
         if clipboard_changed():
             send_clipboard()
