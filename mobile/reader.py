@@ -1,6 +1,6 @@
 # compatible with iOS 18
 
-from subprocess import check_output
+from subprocess import check_output, CalledProcessError
 from requests import get, post
 from requests.exceptions import ConnectionError
 from time import sleep
@@ -8,11 +8,15 @@ from time import sleep
 HOST: str = "192.168.200.40"
 PORT: int = 1413
 URL: str = f"http://{HOST}:{PORT}"
-
 PREVIOUS_CLIPBOARD: str = ""
 
 def get_clipboard() -> str:
-    return str(check_output('pbpaste', env={'LANG': 'en_US.UTF-8'}).decode('utf-8'))
+    try:
+        clipboard = str(check_output('pbpaste', env={'LANG': 'en_US.UTF-8'}).decode('utf-8'))
+        return clipboard
+    except CalledProcessError as e:
+        print(e)
+        return ''
 
 def send_clipboard() -> None:
     copied_text: str = get_clipboard()
@@ -29,9 +33,9 @@ def server_ok() -> bool:
         return False
 
 def clipboard_changed() -> bool:
+    global PREVIOUS_CLIPBOARD
     copied_text = get_clipboard()
     if PREVIOUS_CLIPBOARD != copied_text:
-        global PREVIOUS_CLIPBOARD
         PREVIOUS_CLIPBOARD = copied_text
         return True
     return False
